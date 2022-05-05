@@ -40,6 +40,7 @@ PivotPointPlaneFactor::PivotPointPlaneFactor(const Eigen::Vector3d &point,
 /// add new point and coeff
 }
 
+// 点云面特征因子
 bool PivotPointPlaneFactor::Evaluate(double const *const *parameters, double *residuals, double **jacobians) const {
   TicToc tic_toc;
 

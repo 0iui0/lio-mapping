@@ -76,6 +76,7 @@ struct StampedTransform {
 
 struct EstimatorConfig {
   size_t window_size = 15;
+  // p到i
   size_t opt_window_size = 5;
   int init_window_factor = 3;
   int estimate_extrinsic = 2;

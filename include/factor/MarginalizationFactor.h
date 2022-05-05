@@ -83,6 +83,7 @@ struct ThreadsStruct {
   std::unordered_map<long, int> parameter_block_idx; //local size
 };
 
+// 边缘化
 class MarginalizationInfo {
  public:
   ~MarginalizationInfo();

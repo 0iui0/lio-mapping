@@ -1776,6 +1776,7 @@ void Estimator::SolveOptimization() {
   ceres::internal::ResidualBlock *res_id_marg = NULL;
 
   //region Marginalization residual
+  // 边缘化因子
   if (estimator_config_.marginalization_factor) {
     if (last_marginalization_info) {
       // construct new marginlization_factor
@@ -1789,11 +1790,13 @@ void Estimator::SolveOptimization() {
 
   vector<ceres::internal::ResidualBlock *> res_ids_pim;
 
+  // 添加imu因子
   if (estimator_config_.imu_factor) {
 
     for (int i = 0; i < estimator_config_.opt_window_size;
          ++i) {
       int j = i + 1;
+      // p帧开始取，o和p之间的不优化
       int opt_i = int(estimator_config_.window_size - estimator_config_.opt_window_size + i);
       int opt_j = opt_i + 1;
       if (pre_integrations_[opt_j]->sum_dt_ > 10.0) {
@@ -1813,6 +1816,7 @@ void Estimator::SolveOptimization() {
 //    }
 
       // TODO: is it better to use g_vec_ as global parameter?
+      // 约束相邻两时刻各自的P、V、Q、Ba、Bg
       ceres::internal::ResidualBlock *res_id =
           problem.AddResidualBlock(f,
                                    NULL,
@@ -1828,6 +1832,7 @@ void Estimator::SolveOptimization() {
 
   vector<ceres::internal::ResidualBlock *> res_ids_proj;
 
+  // 点云面特征因子
   if (estimator_config_.point_distance_factor) {
     for (int i = 0; i < estimator_config_.opt_window_size + 1; ++i) {
       int opt_i = int(estimator_config_.window_size - estimator_config_.opt_window_size + i);
@@ -1888,6 +1893,7 @@ void Estimator::SolveOptimization() {
     }
   }
 
+  // 先验因子
   if (estimator_config_.prior_factor) {
     {
       Twist<double> trans_tmp = transform_lb_.cast<double>();
